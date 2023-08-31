@@ -9,7 +9,10 @@ lua54 'yes'
 
 client_scripts {
     'scenarios.lua',
-    'skin.lua',
     'npcs.lua',
-    'main.lua',
+    'cl_questgiver_peds.lua',
+    'cl_questgiver_hud.lua',
+    'cl_questgiver_interact.lua',
+    'cl_questgiver_exports.lua',
+    'cl_questgiver_events.lua',
 }
