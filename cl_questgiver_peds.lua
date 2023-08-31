@@ -54,22 +54,26 @@ local function setSkin(ped,skin)
 
 end
 
-function SpawnPed(location, model, weapon, skin) -- TODO: Take npcID instead
-    if not loadModel(model) then
-        print('Failed to load NPC model ' .. model)
+function SpawnPed(npcID) -- location, model, weapon, skin
+    if not npcID or not NPCs[npcID] then return end
+    local npc = NPCs[npcID]
+    if not npc.model then npc.model = defaultModel end
+
+    if not loadModel(npc.model) then
+        print('Failed to load NPC model ' .. npc.model)
         return
     end
 
-    local conflict, otherPed = findConflictingPed(location, autoScenarioRange)
+    local conflict, otherPed = findConflictingPed(npc.location, autoScenarioRange)
     if conflict then
         -- FIXME: This only works if you own this ped... Dispatch to server?
         ClearPedTasksImmediately(otherPed)
         TaskWanderStandard(otherPed, 10.0, 10)
     end
 
-    local ped = CreatePed(4, model, location.x, location.y, location.z, location.w, false, false)
+    local ped = CreatePed(4, npc.model, npc.location.x, npc.location.y, npc.location.z, npc.location.w, false, false)
     SetEntityAlpha(ped, 0, false)
-    SetModelAsNoLongerNeeded(model)
+    SetModelAsNoLongerNeeded(npc.model)
     -- SetEntityCoordsNoOffset(ped, location.x, location.y, location.z, true, false, false)
     SetPedConfigFlag(ped, 17, true) -- CPED_CONFIG_FLAG_BlockNonTemporaryEvents
     SetPedConfigFlag(ped, 43, true) -- CPED_CONFIG_FLAG_DisablePlayerLockon
@@ -86,8 +90,8 @@ function SpawnPed(location, model, weapon, skin) -- TODO: Take npcID instead
         true -- Drowning
     )
 
-    if skin then
-        setSkin(ped, skin)
+    if npc.skin then
+        setSkin(ped, npc.skin)
     else
         SetPedRandomProps(ped)
         SetPedRandomComponentVariation(ped, 0)
@@ -97,8 +101,8 @@ function SpawnPed(location, model, weapon, skin) -- TODO: Take npcID instead
     -- SetEntityCollision(ped, false, false)
     TaskLookAtEntity(ped, PlayerPedId(), -1, 2048, 3)
 
-    if weapon then
-        GiveWeaponToPed(ped, weapon, 1, true, true)
+    if npc.weapon then
+        GiveWeaponToPed(ped, npc.weapon, 1, true, true)
         SetPedDropsWeaponsWhenDead(ped, false)
     end
 
@@ -109,6 +113,10 @@ function SpawnPed(location, model, weapon, skin) -- TODO: Take npcID instead
         end
     end)
 
+    TriggerEvent('questiver:spawn', npcID, ped)
+
+    NPCs[npcID].ped = ped
+
     return ped
 end
 
@@ -116,6 +124,8 @@ function DespawnPed(npcID, instant)
     if not NPCs[npcID] then return end
     if NPCs[npcID].ped and DoesEntityExist(NPCs[npcID].ped) then
         local ped = NPCs[npcID].ped or 0
+
+        TriggerEvent('questiver:despawn', npcID, ped)
 
         if not instant then
             for alpha = 255, 0, -51 do
@@ -140,21 +150,21 @@ Citizen.CreateThread(function()
 
         local aimed, aimedEntity -- Disabled because it's not very elegant
         -- aimed, aimedEntity = GetEntityPlayerIsFreeAimingAt(PlayerId()) -- Not working right yet
-        for i, npc in ipairs(NPCs) do
+        for npcID, npc in ipairs(NPCs) do
             Citizen.Wait(0)
             local npcDistance = #(coords - npc.location.xyz)
             if not npc.disabled and npcDistance < npcSpawnRange then
                 if not npc.ped or not DoesEntityExist(npc.ped) then
-                    npc.ped = SpawnPed(npc.location, npc.model or defaultModel, npc.weapon, npc.skin)
+                    SpawnPed(npcID)
                     if npc.marker then
-                        table.insert(NPCsWithMarkers, i)
+                        table.insert(NPCsWithMarkers, npcID)
                     end
                     if npc.interact then
-                        table.insert(NPCsWithInteraction, i)
+                        table.insert(NPCsWithInteraction, npcID)
                     end
                 end
                 if IsPedFatallyInjured(npc.ped) then
-                    DespawnPed(i)
+                    DespawnPed(npcID)
                 end
                 if aimed and npc.ped == aimedEntity then
                     TaskHandsUp(npc.ped, 10000, -1, 10000, true)
@@ -190,7 +200,7 @@ Citizen.CreateThread(function()
                 end
             else
                 if npc.ped and DoesEntityExist(npc.ped) then
-                    DespawnPed(i)
+                    DespawnPed(npcID)
                 end
             end
         end
