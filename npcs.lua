@@ -81,7 +81,7 @@ NPCs = {
     {
         model = `a_c_westy`,
         location = vec4(21.022,-1350.198,28.325,179.699),
-        scenario = SCENARIO.none,
+        scenario = "WORLD_DOG_SITTING_SMALL",
         interact = {
             label = '',
             code = function(npcID)
