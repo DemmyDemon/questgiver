@@ -9,6 +9,7 @@ lua54 'yes'
 
 client_scripts {
     'scenarios.lua',
+    'skin.lua',
     'npcs.lua',
     'main.lua',
 }

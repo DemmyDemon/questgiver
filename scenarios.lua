@@ -1,5 +1,6 @@
 SCENARIO = {
     auto = "AUTO",
+    none = "",
     coffee = "WORLD_HUMAN_AA_COFFEE",
     smoke = "WORLD_HUMAN_AA_SMOKE",
     binoculars = "WORLD_HUMAN_BINOCULARS",
