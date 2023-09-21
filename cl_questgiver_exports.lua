@@ -113,6 +113,6 @@ function IsInteractable(npcID)
     if not NPCs[npcID] or not NPCs[npcID].interact then
         return -- No NPC, no response. nil is a false-y value anyway.
     end
-    return not NPCs[npcID].interact.hide
+    return not NPCs[npcID].interact.disable
 end
 exports('IsInteractable', IsInteractable)
