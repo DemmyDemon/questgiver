@@ -98,7 +98,7 @@ function DisableInteraction(npcID, setting)
 
     if setting == nil then -- Checking for nil specifically, not falseness.
         NPCs[npcID].interact.disable = not NPCs[npcID].interact.disable
-        return NPCs[npcID].interact.hide
+        return NPCs[npcID].interact.disable
     end
 
     NPCs[npcID].interact.disable = (setting) -- Store it's truthiness, not it's value
