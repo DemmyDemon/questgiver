@@ -37,7 +37,6 @@ end
 function DisplayInteractMessage(ped, message)
     if message == '' then return end
     local coords = GetPedBoneCoords(ped, 0x9995, 0.0, 0.0, 0.0) -- 0x796E for head
-    -- SetFloatingHelpTextToEntity(1, ped, 0.025, -0.1)
     SetFloatingHelpTextWorldPosition(1, coords.x, coords.y, coords.z)
     SetFloatingHelpTextStyle(1, 3, hudColour, -1, 0, 0)
     BeginTextCommandDisplayHelp('QG_INTERACT')
