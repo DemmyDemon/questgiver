@@ -4,6 +4,7 @@
 ---@return integer npcID The ID of the added NPC
 function Add(npcDefinition)
     -- TODO: Sanity check the npcDefinition?
+    npcDefinition.resource = GetInvokingResource()
     if npcDefinition.blip and not npcDefinition.disabled then
         npcDefinition.blip.ref = PlaceBlip(npcDefinition.location.xy, npcDefinition.blip)
     end
@@ -82,11 +83,11 @@ function HasMarker(npcID)
 end
 exports('HasMarker', HasMarker)
 
----Hide the intraction prompt foor this NPC
+---Disable the intraction for this NPC
 ---@param npcID number ID of the NPC in question
----@param setting boolean? True to hide the interaction prompt, false to show it, nil to toggle
----@return boolean? isHidden The state of the interaction prompt. True is hidden, False is shown, nil means it is an invalid NPC or it has no interact
-function HideInteraction(npcID, setting)
+---@param setting boolean? True to disable the interaction, false to show it, nil to toggle
+---@return boolean? isDisabled The state of the interaction. True is disabled, False is enabled, nil means it is an invalid NPC or it has no interaction
+function DisableInteraction(npcID, setting)
     if not NPCs[npcID] then
         return -- nil, as in "no status"
     end
@@ -96,14 +97,14 @@ function HideInteraction(npcID, setting)
     end
 
     if setting == nil then -- Checking for nil specifically, not falseness.
-        NPCs[npcID].interact.hide = not NPCs[npcID].interact.hide
+        NPCs[npcID].interact.disable = not NPCs[npcID].interact.disable
         return NPCs[npcID].interact.hide
     end
 
-    NPCs[npcID].interact.hide = (setting) -- Store it's truthiness, not it's value
-    return NPCs[npcID].interact.hide
+    NPCs[npcID].interact.disable = (setting) -- Store it's truthiness, not it's value
+    return NPCs[npcID].interact.disable
 end
-exports('HideInteraction', HideInteraction)
+exports('DisableInteraction', DisableInteraction)
 
 ---Check if an NPC is currently interactable
 ---@param npcID number The ID of the NPC in question

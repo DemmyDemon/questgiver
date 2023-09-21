@@ -17,6 +17,7 @@
 ---@field pedCoords vector3? Ped's coordinates, if spawned.
 ---@field skin table? Skin definition -- TODO: Class for skin definition? I really don't want to.
 ---@field weapon integer|string? Weapon for this NPC to be holding, if any.
+---@field resource string? What resource this NPC belongs to.
 
 ---@class NPCBlip
 ---@field sprite integer? Sprite to use, if non-default
@@ -29,8 +30,8 @@
 -- TODO: More fields? Colour, shape, all manner of stuff, I guess?
 
 ---@class NPCInteraction
----@field hide boolean? Should the interaction be hidden?
----@field label string? Label to show next to the input prompt. Omit for "Interact", set to blank string to not prompt.
+---@field disable boolean? Should the interaction be completely disabled?
+---@field label string? Label to show next to the input prompt. Omit for "Interact", set to blank string to not prompt, but still have the intraction available.
 ---@field voice string? Voice line to say when interaction happens, if any.
 ---@field code function? Function to run when intraction happens.
 ---@field event string? Event to emit when interaction happens.

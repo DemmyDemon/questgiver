@@ -41,7 +41,7 @@ Citizen.CreateThread(function()
             if not ped or not DoesEntityExist(ped) then
                 NPCs[npcID].ped = nil
                 table.remove(NPCsWithInteraction, i)
-            elseif not NPCs[npcID].interact.hide then
+            elseif not NPCs[npcID].interact.disable then
                 local dist = #( myCoords - NPCs[npcID].pedCoords )
                 if dist <= npcInteractRange then
                     maybeInteract(npcID)

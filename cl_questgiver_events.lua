@@ -1,17 +1,22 @@
-AddEventHandler('onResourceStop', function(name)
-    if name ~= GetCurrentResourceName() then return end
+AddEventHandler('onResourceStop', function(stoppedResource)
+    local thisResource = GetCurrentResourceName()
     for i=1, #NPCs do
-        if NPCs[i].blip and NPCs[i].blip.ref then
-            RemoveBlip(NPCs[i].blip.ref)
+        if stoppedResource == thisResource or NPCs[i].resource == stoppedResource then
+            if NPCs[i].blip and NPCs[i].blip.ref then
+                if DoesBlipExist(NPCs[i].blip.ref) then
+                    RemoveBlip(NPCs[i].blip.ref)
+                end
+            end
+            DespawnPed(i, true)
+            NPCs[i].disabled = true
         end
-        DespawnPed(i, true)
     end
 end)
 
-AddEventHandler('questgiver:hideMarker', function(npcID, hideTime, hideInteractTime)
+AddEventHandler('questgiver:hideMarker', function(npcID, hideTime, disableInteractTime)
     HideMarker(npcID, true)
-    if hideInteractTime  then
-        TriggerEvent('questgiver:hideInteraction', npcID, hideInteractTime)
+    if disableInteractTime  then
+        TriggerEvent('questgiver:disableInteraction', npcID, disableInteractTime)
     end
 
     if hideTime and hideTime > 0 then
@@ -20,10 +25,10 @@ AddEventHandler('questgiver:hideMarker', function(npcID, hideTime, hideInteractT
     end
 end)
 
-AddEventHandler('questgiver:hideInteraction', function(npcID, length)
-    HideInteraction(npcID, true)
+AddEventHandler('questgiver:disableInteraction', function(npcID, length)
+    DisableInteraction(npcID, true)
     if length and length > 0 then
         Citizen.Wait(length)
-        HideInteraction(npcID, false)
+        DisableInteraction(npcID, false)
     end
 end)
