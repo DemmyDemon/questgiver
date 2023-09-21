@@ -1,6 +1,5 @@
 local defaultScenario = GetConvar("questgiverDefaultScenario", SCENARIO.clipboard)
-
-local defaultModel = `s_m_y_doorman_01` -- TODO: Make configurable by convar
+local defaultModel = GetConvarInt("questgiverDefaultModel", GetHashKey('s_m_y_doorman_01')) -- Yes, this could use `backticks`, but for it's a *single* call, and doing it this way simplifies Lua language server diagnostics.
 
 local npcSpawnRange = 75.0
 local autoScenarioRange = 2.5
