@@ -14,11 +14,7 @@ end)
 
 function PlaceBlip(coords, data)
     local blip = AddBlipForCoord(coords.x, coords.y, 0.0)
-    if data.sprite then
-        SetBlipSprite(blip, data.sprite)
-    else
-        SetBlipSprite(blip, 280)
-    end
+    SetBlipSprite(blip, data.sprite or 280)
     SetBlipHighDetail(blip, true)
     SetBlipAsShortRange(blip, true)
     SetBlipColour(blip, data.colour or hudColour)
