@@ -6,7 +6,7 @@ Interacting with them can run code, trigger events, or just play a voice line. T
 
 # How to add NPCs
 
-Since the script doesn't really *do* anything on it's own, adding NPCs directly to `questiver` is not recommended.
+Since the script doesn't really *do* anything on it's own, adding NPCs directly to `questgiver` is not recommended.
 
 ## Short version
 
@@ -83,7 +83,7 @@ I like things organized, so I've organized all the options into tables.
 
 ## General options
 
-These options in the NPCDef type. See also [classes.lua](classes.lua). The options in the class that are not listed here are things handled internally.
+These options are in the NPCDef type. See also [classes.lua](classes.lua). The options in the class that are not listed here are things handled internally.
 
 | Key      | Type           | Default                 | Purpose |
 |----------|----------------|-------------------------|---------|
@@ -129,7 +129,7 @@ If we give our NPC the greetings of `{"GENERIC_HI", "GENERIC_BYE"}`, then it wil
 
 This ped *does not* have `shop_greet_*`, nor `shop_goodbye_*` entries, so the shop keeper example above will *not* work. It won't crash, or anything; The NPC won't say anything at all.
 
-## Intract
+## Interact
 
 | Key     | Type     | Default    | Purpose |
 |---------|----------|------------|---------|
@@ -199,7 +199,7 @@ There are two *special* values.
 ### The "AUTO" scenario
 
 On the GTAV map, there are thousands upon thousands of scenario locations, where the NPC peds *do stuff*. They talk on the phone, they use the ATM, they sit in a chair, they eat a burger. All these are map scenarios.  
-If you set the [Location](#location) of an NPC within 2.5 meters of such a scenario, you can specify the scenario in your configuration as `SCENARIO.auto` or `"AUTO"`, and `questgiver` will do it's level best to use whatever scenario is there.
+If you set the [Location](#location) of an NPC within 2.5 meters of such a scenario, you can specify the scenario in your configuration as `SCENARIO.auto` or `"AUTO"`, and `questgiver` will do it's best to use whatever scenario is there.
 
 [TaskUseNearestScenarioToCoordWarp](https://docs.fivem.net/natives/?_0x58E2E0F23F6B76C3) has some of the details for my fellow nerds.
 
@@ -275,7 +275,7 @@ This looks like so:
 
 # Exported functions
 
-Exported functions are the main
+Exported functions are the main way for developers to interact with `questgiver`. In fact, I should hope it's the *only* way, as the [npcs.lua](npcs.lua) file is absolutely going away soon.
 
 ## Add
 
@@ -291,7 +291,7 @@ Returns an NPC ID for the added NPC.
 
 ## Enable
 
-Pretains to the whole NPC. Disabled NPCs don't show up and can't be interacted with.
+Is about the whole NPC. Disabled NPCs don't show up and can't be interacted with.
 
 ```lua
 local isEnabled = exports.questgiver:Enable(npcID, state)
@@ -304,7 +304,7 @@ Returns the state *after* setting it, or `nil` if the given NPC ID is invalid.
 
 ## IsEnabled
 
-Pretains to the whole NPC. Disabled NPCs don't show up and can't be interacted with.
+Is about the whole NPC. Disabled NPCs don't show up and can't be interacted with.
 
 ```lua
 local isEnabled = exports.questgiver:IsEnabled(npcID)
@@ -317,7 +317,7 @@ Returns the enabled state of the given NPC. `true` if it is enabled and will spa
 
 ## GetPed
 
-Pretains to the actual spawned entity, if any.
+Is about the actual spawned entity, if any.
 
 ```lua
 exports.questgiver:GetPed(npcID)
@@ -330,7 +330,7 @@ If you are too far away, it will not be spawned, and is not obtainable.
 
 ## HideMarker
 
-Pretains to the floating symbol above the NPCs head.
+Is about the floating symbol above the NPCs head.
 
 ```lua
 local isHidden = exports.questgiver:HideMarker(npcID, setting)
@@ -343,7 +343,7 @@ Returns the hiddenness of the marker as a boolean value, or `nil` if the NPC ID 
 
 ## HasMarker
 
-Pretains to the floating symbol above the NPCs head.
+Is about the floating symbol above the NPCs head.
 
 ```lua
 local hasMarker = exports.questgiver:HasMarker(npcID)
@@ -355,7 +355,7 @@ Returns `nil` if the NPC ID is invalid, or it has no marker defined, `true` if t
 
 ## DisableInteraction
 
-Pretains to the `[E] Interact`-style prompt.
+Is about the `[E] Interact`-style prompt.
 
 ```lua
 local isDisabled = exports.questgiver:DisableInteraction(npcID, setting)
@@ -368,7 +368,7 @@ Returns `nil` if the NPC ID is invalid, or it has no interaction specified. `tru
 
 ## IsInteractable
 
-Pretains to the `[E] Interact`-style prompt.
+Is about the `[E] Interact`-style prompt.
 
 ```lua
 exports.questgiver:IsInteractable(npcID)
@@ -399,7 +399,7 @@ You don't *have to* set any of these, but if you're making resources using `ques
 
 String: `setr questgiverPrompt "~INPUT_CONTEXT~ ~a~"`
 
-Sets the template for the intraction prompt shown when you are close to an interactable NPC.
+Sets the template for the interaction prompt shown when you are close to an interactable NPC.
 
 ## questgiverColour
 
@@ -420,3 +420,7 @@ Sets the default scenario an NPC will perform if no other scenario is specified.
 Integer: `setr questgiverDefaultModel 579932932`
 
 Sets the default model for quest givers.  Default is GetHashKey('s_m_y_doorman_01')
+
+# Thanks
+
+`@d4nz._` on Discord for preefrooding the README!
