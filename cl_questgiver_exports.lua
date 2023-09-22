@@ -13,6 +13,10 @@ function Add(npcDefinition)
 end
 exports('Add', Add)
 
+---Set the enabled state of the given NPC
+---@param npcID number NPC ID
+---@param state boolean True if you want the NPC to spawn when it is within range, false otherwise.
+---@return boolean|nil isEnabled The value of the setting after it was set, or nil if there is no such NPC.
 function Enable(npcID, state)
     if not NPCs[npcID] then
         return nil -- As in "No such NPC"
@@ -33,6 +37,9 @@ function Enable(npcID, state)
 end
 exports('Enable', Enable)
 
+---Check if a given NPC is enabled or not
+---@param npcID number NPC ID
+---@return boolean|nil isEnabled True if the NPC is enabled and will be spawned when you are within range, nil if there is no such NPC.
 function IsEnabled(npcID)
     if not NPCs[npcID] then
         return nil -- As in "No such NPC"
